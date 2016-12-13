@@ -1,0 +1,16 @@
+{application, erlgeo, [
+    {description,"OpenCage Geocoder API binding"},
+    {vsn,"0.0.1"},
+    {registered, [
+
+    ]},
+    {applications, [
+        kernel,
+        stdlib,
+        sasl,
+        ssl,
+        inets
+    ]},
+    {mod, {erlgeo, []}},
+    {env, []}
+]}.
