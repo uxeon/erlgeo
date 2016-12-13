@@ -45,7 +45,7 @@ You can use ```reverse/3``` to provide options list. Options names are consisten
 * ```erlgeo:reverse(Lon,Lat,[{min_confidence,10}])```
 * ```erlgeo:reverse(Lon,Lat,[{limit,5}])```
 
-See OpenCage API documentation for more information.
+See [OpenCage API documentation](https://geocoder.opencagedata.com/api) for more information.
 
 Dependencies
 ---
