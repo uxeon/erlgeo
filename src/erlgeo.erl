@@ -42,11 +42,17 @@
 %%------------------------------------------------------------------------------
 -export([
     reverse/2,
-    reverse/3
+    reverse/3,
+    forward/1,
+    forward/2
 ]).
 
 reverse(Lon,Lat) -> erlgeo_opencage:reverse(Lon,Lat).
 reverse(Lon,Lat,Options) -> erlgeo_opencage:reverse(Lon,Lat,Options).
+
+forward(Address) -> erlgeo_opencage:forward(Address).
+forward(Address,Options) -> erlgeo_opencage:reverse(Address,Options).
+
 
 %%------------------------------------------------------------------------------
 %% Macros

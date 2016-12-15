@@ -33,7 +33,9 @@
 %% -----------------------------------------------------------------------------
 -export([
     reverse/2,
-    reverse/3
+    reverse/3,
+    forward/1,
+    forward/2
 ]).
 
 %% -----------------------------------------------------------------------------
@@ -91,6 +93,39 @@ reverse(Lon,Lat,Options) when is_binary(Lon) andalso is_binary(Lat) ->
     reverse(StrLon,StrLat,Options);
 
 reverse(Lon,Lat,Options) when is_list(Lon) andalso is_list(Lat) ->
+    send_request([Lat,"%2C",Lon],Options).
+
+%% -----------------------------------------------------------------------------
+%% @doc
+%% @spec
+%% @end
+%% -----------------------------------------------------------------------------
+-spec forward(string() | binary()) -> map().
+forward(Address) ->
+    forward(Address,?DEFAULT_OPTIONS).
+
+%% -----------------------------------------------------------------------------
+%% @doc
+%% @spec
+%% @end
+%% -----------------------------------------------------------------------------
+-spec forward(string() | binary(),map() | list()) -> map().
+forward(Address,Options) when is_binary(Address) ->
+    forward(binary_to_list(Address),Options);
+
+forward(Address,Options) when is_list(Address) ->
+    send_request(http_uri:encode(Address),Options).
+
+
+%% =============================================================================
+%% Internal functions
+%% =============================================================================
+%% -----------------------------------------------------------------------------
+%% @doc
+%% @spec
+%% @end
+%% -----------------------------------------------------------------------------
+send_request(Query,Options) ->
     URLOptions = maps:values(maps:map(fun
         (no_annotations,_) -> "&no_annotations=1";
         (no_dedupe,_) -> "&no_dedupe=1";
@@ -113,7 +148,7 @@ reverse(Lon,Lat,Options) when is_list(Lon) andalso is_list(Lat) ->
     end,
     URL = [
         "https://api.opencagedata.com/geocode/v1/json?q=",
-        Lat,"%2C",Lon,
+        Query,
         "&pretty=0",
         URLOptions,
         "&key=",

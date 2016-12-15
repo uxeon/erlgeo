@@ -29,18 +29,19 @@ $ cd erlgeo
 $ make start
 1> application:ensure_all_started(erlgeo).
 2> erlgeo:reverse(20.0,50.0).
+3> erlgeo:forward("Aleje Jerozolimskie 214, Warszawa").
+4> erlgeo:forward(<<"Aleje Jerozolimskie 214, Warszawa">>).
 
 ```
 
 Options
 ----
 
-You can use ```reverse/3``` to provide options list. Options names are consistent with OpenCage API options:
+You can use ```reverse/3``` or ```forward/2``` to provide options list. Options names are consistent with OpenCage API options:
 
 * ```erlgeo:reverse(Lon,Lat,[no_annotations])```
 * ```erlgeo:reverse(Lon,Lat,[no_dedupe])```
 * ```erlgeo:reverse(Lon,Lat,[no_record])```
-* ```erlgeo:reverse(Lon,Lat,[{language,"pl"}])``` or ```erlgeo:reverse(Lon,Lat,[{language,<<"pl">>}])```
 * ```erlgeo:reverse(Lon,Lat,[{language,"pl"}])``` or ```erlgeo:reverse(Lon,Lat,[{language,<<"pl">>}])```
 * ```erlgeo:reverse(Lon,Lat,[{min_confidence,10}])```
 * ```erlgeo:reverse(Lon,Lat,[{limit,5}])```
