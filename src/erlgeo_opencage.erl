@@ -110,12 +110,8 @@ forward(Address) ->
 %% @end
 %% -----------------------------------------------------------------------------
 -spec forward(string() | binary(),map() | list()) -> map().
-forward(Address,Options) when is_binary(Address) ->
-    forward(binary_to_list(Address),Options);
-
-forward(Address,Options) when is_list(Address) ->
-    send_request(http_uri:encode(Address),Options).
-
+forward(Address,Options) ->
+    send_request(encode(Address),Options).
 
 %% =============================================================================
 %% Internal functions
@@ -162,6 +158,39 @@ send_request(Query,Options) ->
     Decoded = ?DECODE(list_to_binary(RespBody)),
     {ok,Decoded}.
 
-%% =============================================================================
-%% Internal functions
-%% =============================================================================
+%% -----------------------------------------------------------------------------
+%% @doc encode uri (because http_uri:encode does not support UTF-8)
+%% @spec
+%% @end
+%% -----------------------------------------------------------------------------
+-spec encode(list() | binary()) -> list().
+encode(S) when is_list(S) ->
+    encode(unicode:characters_to_binary(S));
+encode(<<C:8, Cs/binary>>) when C >= $a, C =< $z ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) when C >= $A, C =< $Z ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) when C >= $0, C =< $9 ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) when C == $. ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) when C == $- ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) when C == $_ ->
+    [C] ++ encode(Cs);
+encode(<<C:8, Cs/binary>>) ->
+    escape_byte(C) ++ encode(Cs);
+encode(<<>>) ->
+    "".
+
+-spec escape_byte(byte()) -> list().
+escape_byte(C) ->
+    "%" ++ hex_octet(C).
+
+-spec hex_octet(byte()) -> list().
+hex_octet(N) when N =< 9 ->
+    [$0 + N];
+hex_octet(N) when N > 15 ->
+    hex_octet(N bsr 4) ++ hex_octet(N band 15);
+hex_octet(N) ->
+    [N - 10 + $a].
