@@ -11,7 +11,7 @@ For more information see Roadmap at the end of this document.
 Features
 ---
 
-* Partial support of [OpenCage Geocoder](https://geocoder.opencagedata.com/)
+* Partial support of [OpenCage Geocoder](https://opencagedata.com/)
 
 Quick start
 ----
